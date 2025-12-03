@@ -1,0 +1,31 @@
+# Maven build output
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### Claude Code ###
+.claude/settings.local.json
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Mac OS ###
+.DS_Store
+
+### Windows ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+### Logs ###
+*.log
+
+### Temporary files ###
+*.tmp
+*.bak
+*.swp
+*~

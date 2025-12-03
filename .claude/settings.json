@@ -1,0 +1,5 @@
+{
+  "commands": {
+    "/update-docs": "Review recent code changes and update CLAUDE.md to reflect new patterns, dependencies, or conventions. Keep it concise and maintain the existing structure."
+  }
+}
