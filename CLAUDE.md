@@ -37,14 +37,19 @@ A Java synchronization utility library for executing actions under locks with co
 
 ### Commands
 - `mvn clean compile` - Compile with module system support
-- `mvn test` - Run JUnit 5 tests (uses Byte Buddy experimental flag for Java 25)
+- `mvn test` - Run JUnit 6 and JUnit 4 tests (92 tests total)
 - `mvn clean package` - Build distributable JAR
 - `mvn clean install` - Install to local Maven repository
 
 ### Java Version
 - **Target**: Java 25
 - **Requirement**: Set `JAVA_HOME` environment variable to JDK 25 installation path
-- **Note**: Maven Surefire configured with `-Dnet.bytebuddy.experimental=true` for Byte Buddy compatibility
+
+### Maven Configuration Notes
+- **Byte Buddy compatibility**: Surefire configured with `-Dnet.bytebuddy.experimental=true` for Mockito support in Java 25
+- **Module path**: Surefire uses `<useModulePath>false</useModulePath>` to run tests on classpath (required for JUnit 4 via junit-vintage-engine)
+- **Test discovery**: Default Surefire patterns apply (`**/*Test.java`, `**/*Tests.java`)
+- **JUnit 4 support**: Included for backward compatibility with older projects
 
 ## Project Structure
 
@@ -104,7 +109,9 @@ A Java synchronization utility library for executing actions under locks with co
 - **JSpecify 1.0.0** (provided) - Null-safety annotations (@NullMarked, @Nullable)
 
 ### Testing
-- **JUnit Jupiter 6.0.0** - Test framework
+- **JUnit Jupiter 6.0.0** - JUnit 6 test framework
+- **JUnit 4.13.2** - JUnit 4 for backward compatibility with older projects
+- **JUnit Vintage Engine 6.0.0** - Runs JUnit 4 tests on JUnit Platform
 - **Mockito 5.14.2** - Mocking framework (experimental Java 25 support)
 - **Awaitility 4.2.2** - Async/concurrent test utilities
 
