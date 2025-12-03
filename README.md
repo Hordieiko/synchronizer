@@ -5,7 +5,7 @@ A Java utility library for executing actions under locks with consistent lock ac
 ## Features
 
 - **Flexible Lock Acquisition**: Support for any `java.util.concurrent.locks.Lock` implementation
-- **Multiple Acquisition Strategies**: Blocking, timed, and interruptible lock acquisition via `LockAcquirer` pattern
+- **Customizable Acquisition Strategies**: Built-in blocking, timed, and interruptible strategies via `LockAcquirer` functional interface - or create your own custom strategy
 - **Rich Action Types**: Execute `Runnable`, `Supplier`, `Callable`, `Command`, and `Action` with automatic lock management
 - **Typed Exception Handling**: Declare expected exceptions with compile-time safety
 - **Fallback Support**: Graceful degradation with fallback suppliers
