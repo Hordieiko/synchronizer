@@ -26,6 +26,12 @@ A Java synchronization utility library for executing actions under locks with co
 - Custom Claude Code commands are defined as `.md` files in `.claude/commands/` directory
 - Each command file contains the prompt/instructions for that command
 
+### Git Commit Messages:
+- **DO NOT** include Claude Code mentions in commit messages
+- **DO NOT** add "🤖 Generated with [Claude Code]" footer
+- **DO NOT** add "Co-Authored-By: Claude <noreply@anthropic.com>"
+- Keep commit messages professional and focused on the changes made
+
 ### Sections to Monitor:
 - **Build & Test** → Maven commands, Java version, build configuration
 - **Project Structure** → Module system, package layout
