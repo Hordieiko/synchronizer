@@ -21,7 +21,10 @@ A Java synchronization utility library for executing actions under locks with co
 1. After making code changes that affect the above, immediately update the relevant section(s) in CLAUDE.md
 2. Keep the existing structure and formatting
 3. Be concise - add only what's necessary
-4. Use the `/update-docs` command if uncertain what changed
+
+### Custom Commands:
+- Custom Claude Code commands are defined as `.md` files in `.claude/commands/` directory
+- Each command file contains the prompt/instructions for that command
 
 ### Sections to Monitor:
 - **Build & Test** → Maven commands, Java version, build configuration
