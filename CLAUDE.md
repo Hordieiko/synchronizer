@@ -71,11 +71,49 @@ A Java synchronization utility library for executing actions under locks with co
   - `Command.java` - Functional interface for void operations with exceptions
 - `src/main/java/io/github/hordieiko/synchronizer/internal/` - Internal implementation (not exported)
   - `BaseSynchronizer.java` - Default implementation of Synchronizer interface
+  - `LockAcquirers.java` - Factory for cached LockAcquirer instances (performance optimization)
 - `src/test/java/hordieiko/` - Test suite
   - `SynchronizerTest.java` - Comprehensive test coverage
   - `package-info.java` - Package-level @NullMarked for tests
 
 ## Code Conventions
+
+### General Coding Style
+- **Prefer modern Java features**: Use Java 21+ features (pattern matching, switch expressions, records, sealed classes) over legacy approaches
+- **Self-documenting code**: Use descriptive names for classes, methods, variables, and parameters
+- **Avoid unnecessary comments**:
+  - ❌ Don't write comments that repeat what the code does
+  - ❌ Don't add comments to explain poorly named code - rename it instead
+  - ✅ Only add comments when explaining *why* something is done (business logic, non-obvious decisions)
+  - ✅ Documentation comments for public APIs are acceptable
+- **Modern over legacy**: Prefer `var`/`final var` over explicit types when type is obvious, pattern matching over `instanceof` chains, switch expressions over if-else chains
+
+### Documentation Comments (JEP 467)
+Use **Markdown documentation comments** (`///`) instead of traditional HTML JavaDoc (`/** */`):
+
+- **Syntax**: Each line begins with `///` instead of `/** ... */`
+- **Paragraphs**: Blank lines indicate paragraph breaks (no `<p>` needed)
+- **Lists**: Use `-` for bullet lists (replaces `<ul>` and `<li>`)
+- **Emphasis**: Use `_text_` for emphasis (replaces `<em>`)
+- **Code**: Use backticks `` `code` `` for inline code (replaces `{@code ...}`)
+- **Links to elements**: Use `[element]` syntax (replaces `{@link ...}`)
+  - Simple link: `[List]` or `[java.util.List]` (text derived from element, monospace font)
+  - Custom text: `[a list][List]` (custom text in current font, replaces `{@linkplain ...}`)
+  - Module: `[java.base/]`
+  - Package: `[java.util]`
+  - Class: `[String]`
+  - Field: `[String#CASE_INSENSITIVE_ORDER]`
+  - Method: `[String#chars()]`
+- **Block tags**: Standard tags like `@param`, `@return`, `@see`, `@implSpec` still work (content is Markdown)
+- **Inline tags**: Tags like `{@inheritDoc}` still work
+
+Example:
+```java
+/// Factory for cached [LockAcquirer] instances.
+///
+/// This class is internal and should not be used directly.
+public final class LockAcquirers { }
+```
 
 ### Null-Safety (JSpecify)
 - **Module-level @NullMarked**: All main code is non-null by default (see `module-info.java`)
@@ -85,7 +123,22 @@ A Java synchronization utility library for executing actions under locks with co
 
 ### Lombok Usage
 - `@SneakyThrows` - For checked exceptions in tests
-- `@RequiredArgsConstructor` - For test helper classes
+- `@RequiredArgsConstructor` - For dependency injection (BaseSynchronizer, test helpers)
+- **Avoid `@val` in main code** - Prefer Java `final var` or `var` if it could/should be changed
+
+### Modern Java Patterns
+- **Switch pattern matching (Java 21+)**: Prefer switch expressions with guards for exception type checking
+  ```java
+  switch (e.getCause()) {
+      case Exception ex when condition(ex) -> handleException(ex);
+      default -> rethrow(e);
+  }
+  ```
+- **Pattern matching benefits**: Built-in type safety, null handling, cleaner control flow
+
+### Performance Optimizations
+- **LockAcquirer caching**: Factory methods (`usingLock()`, `usingLockInterruptibly()`, `usingTryLock()`) return cached instances from `LockAcquirers` to avoid repeated lambda allocation
+- **Internal package hiding**: Cache implementations hidden in non-exported `internal` package
 
 ### Exception Handling
 - `LockAcquisitionException` - When THIS synchronizer's lock cannot be acquired

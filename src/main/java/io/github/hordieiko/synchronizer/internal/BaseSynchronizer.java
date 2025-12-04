@@ -4,7 +4,6 @@ import io.github.hordieiko.synchronizer.Synchronizer;
 import io.github.hordieiko.synchronizer.function.Action;
 import io.github.hordieiko.synchronizer.function.Command;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.Callable;
@@ -12,10 +11,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-/**
- * Base implementation of {@link Synchronizer}.
- * <p>This class is internal and should not be used directly.
- */
+/// Base implementation of [Synchronizer].
+///
+/// This class is internal and should not be used directly.
 @RequiredArgsConstructor
 public final class BaseSynchronizer<L extends Lock> implements Synchronizer {
 
@@ -107,17 +105,16 @@ public final class BaseSynchronizer<L extends Lock> implements Synchronizer {
         try {
             return execute(action);
         } catch (ExecutionException e) {
-            val cause = e.getCause();
-            isInstanceThrow(x1Type, cause);
-            isInstanceThrow(x2Type, cause);
-            isInstanceThrow(x3Type, cause);
-            throw e;
+            switch (e.getCause()) {
+                case Exception cause when isInstance(x1Type, cause) -> throw x1Type.cast(cause);
+                case Exception cause when isInstance(x2Type, cause) -> throw x2Type.cast(cause);
+                case Exception cause when isInstance(x3Type, cause) -> throw x3Type.cast(cause);
+                default -> throw e;
+            }
         }
     }
 
-    <X extends Exception> void isInstanceThrow(@Nullable final Class<X> expected,
-                                               @Nullable final Throwable actual) throws X {
-        if (expected != null && expected.isInstance(actual))
-            throw expected.cast(actual);
+    static <X extends Exception> boolean isInstance(final @Nullable Class<X> expected, final Exception actual) {
+        return expected != null && expected.isInstance(actual);
     }
 }
